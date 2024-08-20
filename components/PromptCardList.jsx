@@ -1,4 +1,3 @@
-import React from 'react'
 import PromptCard from './PromptCard'
 
 const PromptCardList = ({data, handleTagClick}) => {

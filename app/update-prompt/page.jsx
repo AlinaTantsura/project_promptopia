@@ -2,7 +2,6 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense } from 'react'
 
 import Form from "@components/Form";
 
@@ -28,7 +27,7 @@ const UpdatePrompt = () => {
     if (promptId) getPromptDetails();
   }, [promptId]);
 
-  const updatePrompt = async (e) => {
+  const editPrompt = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
@@ -59,7 +58,7 @@ const UpdatePrompt = () => {
         post={post}
         setPost={setPost}
         submitting={submitting}
-        handleSubmit={updatePrompt}
+        handleSubmit={editPrompt}
       />
     </Suspense>
   );
