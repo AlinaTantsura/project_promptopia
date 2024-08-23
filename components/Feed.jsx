@@ -1,24 +1,37 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from "react";
 import PromptCardList from "./PromptCardList";
 
 const Feed = () => {
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [posts, setPosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
 
   const handleSearchChange = (e) => {
-    console.log(e)
+    setSearchText(e.target.value);
   };
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch('/api/prompt');
+      const response = await fetch("/api/prompt");
       const data = await response.json();
       setPosts(data);
-    }
+    };
     fetchPosts();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (searchText) {
+      const filteredPosts = posts.filter(
+        (post) =>
+          post.prompt.toLowerCase().includes(searchText.toLowerCase()) ||
+          post.tag.toLowerCase().includes(searchText.toLowerCase()) ||
+          post.creator.username.toLowerCase().includes(searchText.toLowerCase())
+      );
+      setFilteredPosts(filteredPosts);
+    }
+  }, [searchText]);
 
   return (
     <div>
@@ -34,12 +47,13 @@ const Feed = () => {
           />
         </form>
         <PromptCardList
-          data={posts}
+          data={searchText ? filteredPosts : posts}
+          searchWord={searchText.toLowerCase()}
           // handleTagClick={handleTagClick}
         />
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default Feed
+export default Feed;

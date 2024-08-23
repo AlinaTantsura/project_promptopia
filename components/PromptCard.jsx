@@ -5,12 +5,23 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
-const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
+const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, searchWord }) => {
   const { data: session } = useSession();
   const pathName = usePathname();
   const router = useRouter();
   
   const [copied, setCopied] = useState("");
+
+  const searchHighlight = (str) => {
+    // if (!searchWord) return str;
+    if (!searchWord || !str.toLowerCase().includes(searchWord)) {
+      return str.split('-');
+    }
+    else if (searchWord && str.toLowerCase().includes(searchWord)) {
+      const newStr = str.replace(searchWord, `-${searchWord}-`).split('-')
+      return newStr;
+    }
+  };
 
   const handleCopy = () => {
     setCopied(post.prompt);
@@ -30,10 +41,16 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
           />
           <div className="flex flex-col">
             <h3 className="font-satoshi font-semibold text-gray-900">
-              {post.creator.username}
+              {/* {post.creator.username} */}
+              {searchHighlight(post.creator.username).map(item => (
+                <span className={item === searchWord ? "bg-gray-300 rounded-md" : ""} key={crypto.randomUUID()}>{item}</span>
+              ))}
             </h3>
             <p className="font-inter text-sm text-gray-500">
-              {post.creator.email}
+              {/* {post.creator.email} */}
+              {searchHighlight(post.creator.email).map(item => (
+                <span className={item === searchWord ? "bg-gray-300 rounded-md" : ""} key={crypto.randomUUID()}>{item}</span>
+              ))}
             </p>
           </div>
         </div>
@@ -54,10 +71,16 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
           />
         </div>
       </div>
-      <p className="my-4 font-satoshi text-sm text-gray-700">{post.prompt}</p>
+      <p className="my-4 font-satoshi text-sm text-gray-700">
+        {searchHighlight(post.prompt).map(item => (
+                <span className={item === searchWord ? "bg-gray-300 rounded-md" : ""} key={crypto.randomUUID()}>{item}</span>
+              ))}
+      </p>
       <p className="font-inter text-sm blue_gradient cursor-pointer"
       onClick={()=> handleTagClick && handleTagClick(post.tag)}>
-        #{post.tag}
+        #{searchHighlight(post.tag).map(item => (
+                <span className={item === searchWord ? "bg-gray-300 rounded-md text-white" : ""} key={crypto.randomUUID()}>{item}</span>
+              ))}
       </p>
 
       {session?.user.id === post.creator._id && pathName === "/profile" && (
