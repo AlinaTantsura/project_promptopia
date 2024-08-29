@@ -11,14 +11,14 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, searchWord
   const router = useRouter();
   
   const [copied, setCopied] = useState("");
-
+  
   const searchHighlight = (str) => {
     // if (!searchWord) return str;
     if (!searchWord || !str.toLowerCase().includes(searchWord)) {
       return str.split('-');
     }
     else if (searchWord && str.toLowerCase().includes(searchWord)) {
-      const newStr = str.replace(searchWord, `-${searchWord}-`).split('-')
+      const newStr = str.toLowerCase().replaceAll(searchWord, `-${searchWord}-`).split('-')
       return newStr;
     }
   };
@@ -40,16 +40,16 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, searchWord
             className="rounded-full object-contain"
           />
           <div className="flex flex-col">
-            <h3 className="font-satoshi font-semibold text-gray-900">
+            <h3 className="font-satoshi font-semibold text-gray-900" onClick={()=>{router.push(`/profile/${post.creator._id}`)}}>
               {/* {post.creator.username} */}
               {searchHighlight(post.creator.username).map(item => (
-                <span className={item === searchWord ? "bg-gray-300 rounded-md" : ""} key={crypto.randomUUID()}>{item}</span>
+                <span className={item.toLowerCase() === searchWord ? "bg-gray-300 rounded-md" : ""} key={crypto.randomUUID()}>{item}</span>
               ))}
             </h3>
             <p className="font-inter text-sm text-gray-500">
               {/* {post.creator.email} */}
               {searchHighlight(post.creator.email).map(item => (
-                <span className={item === searchWord ? "bg-gray-300 rounded-md" : ""} key={crypto.randomUUID()}>{item}</span>
+                <span className={item.toLowerCase() === searchWord ? "bg-gray-300 rounded-md" : ""} key={crypto.randomUUID()}>{item}</span>
               ))}
             </p>
           </div>
@@ -73,7 +73,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, searchWord
       </div>
       <p className="my-4 font-satoshi text-sm text-gray-700">
         {searchHighlight(post.prompt).map(item => (
-                <span className={item === searchWord ? "bg-gray-300 rounded-md" : ""} key={crypto.randomUUID()}>{item}</span>
+                <span className={item.toLowerCase() === searchWord ? "bg-gray-300 rounded-md" : ""} key={crypto.randomUUID()}>{item}</span>
               ))}
       </p>
       <p className="font-inter text-sm blue_gradient cursor-pointer"

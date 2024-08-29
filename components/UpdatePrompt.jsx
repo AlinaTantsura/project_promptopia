@@ -8,7 +8,7 @@ import Form from "@components/Form";
 const UpdatePrompt = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-    const promptId = searchParams.get("id");
+  const promptId = searchParams.get("id");
   const [submitting, setSubmitting] = useState(false);
   const [post, setPost] = useState({
     prompt: "",
@@ -52,13 +52,13 @@ const UpdatePrompt = () => {
   };
 
   return (
-      <Form
-        type="Edit"
-        post={post}
-        setPost={setPost}
-        submitting={submitting}
-        handleSubmit={editPrompt}
-      />
+    <Form
+      type="Edit"
+      post={post}
+      setPost={setPost}
+      submitting={submitting}
+      handleSubmit={editPrompt}
+    />
   );
 };
 

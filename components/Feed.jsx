@@ -7,21 +7,21 @@ const Feed = () => {
   const [searchText, setSearchText] = useState("");
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
+  const [filteredTag, setFilteredTag] = useState('');
 
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
   };
 
   useEffect(() => {
+    if (filteredTag && filteredTag !== searchText) setFilteredTag('');
     const fetchPosts = async () => {
-      const response = await fetch("/api/prompt");
+      const response = await fetch(`/api/prompt?tag=${filteredTag}`);
+      if (filteredTag) setSearchText(filteredTag);
       const data = await response.json();
       setPosts(data);
     };
     fetchPosts();
-  }, []);
-
-  useEffect(() => {
     if (searchText) {
       const filteredPosts = posts.filter(
         (post) =>
@@ -31,7 +31,11 @@ const Feed = () => {
       );
       setFilteredPosts(filteredPosts);
     }
-  }, [searchText]);
+  }, [filteredTag, searchText]);
+
+  const handleTagClick = (tag) => {
+    setFilteredTag(tag);
+  }
 
   return (
     <div>
@@ -49,7 +53,7 @@ const Feed = () => {
         <PromptCardList
           data={searchText ? filteredPosts : posts}
           searchWord={searchText.toLowerCase()}
-          // handleTagClick={handleTagClick}
+          handleTagClick={handleTagClick}
         />
       </section>
     </div>
